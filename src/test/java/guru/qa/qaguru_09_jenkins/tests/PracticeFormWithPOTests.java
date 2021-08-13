@@ -19,7 +19,7 @@ public class PracticeFormWithPOTests {
 
     String firstName = faker.name().firstName(),
             lastName = faker.name().lastName(),
-            eMail = faker.internet().emailAddress(),
+            eMail = faker.name().firstName()+"."+faker.name().lastName()+"@"+faker.internet().domainName(),
             gender = "Male",
             number = faker.numerify("8#########"),
             subject = "maths",
