@@ -38,16 +38,9 @@ public class PracticeFormWithPOTests {
 
     @BeforeAll
     static void beforeAll() {
-
         String login = credentials.login();
         String password = credentials.password();
         SelenideLogger.addListener("AllureSelenide", new AllureSelenide());
-
-
-
-
-        SelenideLogger.addListener("AllureSelenide", new AllureSelenide());
-
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability("enableVNC", true);
         capabilities.setCapability("enableVideo", true);
@@ -68,7 +61,6 @@ public class PracticeFormWithPOTests {
 
     @Test
     void positiveFillTest() {
-
         step("Open students registration form", () -> registrationPage.openPage());
         step("Fill the form", () -> {
             registrationPage.typeFirstName(firstName)
@@ -96,13 +88,5 @@ public class PracticeFormWithPOTests {
                     .checkAddress(address)
                     .checkStateAndCity(state, city);
         });
-    }
-
-    @Test
-    void test1() {
-
-        registrationPage.openPage();
-        System.out.println("[test1] Browser: " + System.getProperty("browser", "chrome"));
-        System.out.println("[test1] URL: " + System.getProperty("url"));
     }
 }
