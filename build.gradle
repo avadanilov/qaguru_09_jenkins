@@ -23,6 +23,7 @@ dependencies {
     testImplementation("io.qameta.allure:allure-selenide:${allureVersion}")
     testImplementation('org.slf4j:slf4j-simple:1.7.30')
     testImplementation('com.github.javafaker:javafaker:1.0.2')
+    testImplementation('org.aeonbits.owner:owner:1.0.12')
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
@@ -38,4 +39,26 @@ allure {
     useJUnit5 {
         version = "${allureVersion}"
     }
+}
+
+tasks.withType(Test) {
+    systemProperties(System.getProperties())
+    useJUnitPlatform()
+    println "[build.gradle]: " + System.getProperty("browser")
+    testLogging {
+        lifecycle {
+            events "started", "skipped", "failed", "standard_error", "standard_out"
+            exceptionFormat "short"
+        }
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+configurations {
+    testCompile
 }

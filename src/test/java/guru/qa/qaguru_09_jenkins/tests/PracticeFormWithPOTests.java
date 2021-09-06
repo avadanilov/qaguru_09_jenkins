@@ -3,15 +3,17 @@ package guru.qa.qaguru_09_jenkins.tests;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import com.github.javafaker.Faker;
-import io.qameta.allure.selenide.AllureSelenide;
 import guru.qa.qaguru_09_jenkins.helpers.Attach;
 import guru.qa.qaguru_09_jenkins.pages.RegistrationPage;
+import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import static guru.qa.qaguru_09_jenkins.config.Credentials.credentials;
 import static io.qameta.allure.Allure.step;
+import static java.lang.String.format;
 
 public class PracticeFormWithPOTests {
     RegistrationPage registrationPage = new RegistrationPage();
@@ -19,7 +21,7 @@ public class PracticeFormWithPOTests {
 
     String firstName = faker.name().firstName(),
             lastName = faker.name().lastName(),
-            eMail = faker.name().firstName()+"."+faker.name().lastName()+"@"+faker.internet().domainName(),
+            eMail = faker.name().firstName() + "." + faker.name().lastName() + "@" + faker.internet().domainName(),
             gender = "Male",
             number = faker.numerify("8#########"),
             subject = "maths",
@@ -36,6 +38,14 @@ public class PracticeFormWithPOTests {
 
     @BeforeAll
     static void beforeAll() {
+
+        String login = credentials.login();
+        String password = credentials.password();
+        SelenideLogger.addListener("AllureSelenide", new AllureSelenide());
+
+
+
+
         SelenideLogger.addListener("AllureSelenide", new AllureSelenide());
 
         DesiredCapabilities capabilities = new DesiredCapabilities();
@@ -45,7 +55,7 @@ public class PracticeFormWithPOTests {
         Configuration.browserCapabilities = capabilities;
         Configuration.baseUrl = "https://demoqa.com";
         Configuration.startMaximized = true;
-        Configuration.remote = "https://user1:1234@selenoid.autotests.cloud/wd/hub/";
+        Configuration.remote = format("https://%s:%s@" + System.getProperty("url"), login, password);
     }
 
     @AfterEach
@@ -86,5 +96,13 @@ public class PracticeFormWithPOTests {
                     .checkAddress(address)
                     .checkStateAndCity(state, city);
         });
+    }
+
+    @Test
+    void test1() {
+
+        registrationPage.openPage();
+        System.out.println("[test1] Browser: " + System.getProperty("browser", "chrome"));
+        System.out.println("[test1] URL: " + System.getProperty("url"));
     }
 }
